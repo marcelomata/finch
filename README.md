@@ -123,4 +123,4 @@
 * [Course Notes](https://github.com/zhedongzheng/finch/blob/master/nlp-models/kg/notes.md)
 
 #### TensorFlow Project Template（TensorFlow 项目模版）
-* [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
+* [Based on TF Estimator](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
