@@ -1,4 +1,3 @@
-from configs import args
 from datetime import datetime
 
 import logging
