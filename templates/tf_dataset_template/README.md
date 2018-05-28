@@ -1,5 +1,9 @@
 
 ```
+├── base
+│   └── base_model.py   
+│   └── base_trainer.py   
+│
 ├── configs
 │   └── example.py   
 │
@@ -8,10 +12,13 @@
 │
 ├── log             
 │   └── example.py
-│   
+│
 ├── mains              
 │   └── example.py  
 │  
-└── model  
+├── model              
+│   └── example.py  
+│  
+└── trainers
     └── example.py
 ```
