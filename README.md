@@ -120,7 +120,7 @@
     *  [Dynamic Memory Network](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/nlp-models/tensorflow/dmn/train.ipynb)
 
 #### Knowledge Graph（知识图谱）
-* [Course Notes](https://github.com/zhedongzheng/finch/blob/master/nlp-models/kg/notes.md)
+* [Course Notes](https://github.com/zhedongzheng/finch/blob/master/notes/kg/notes.md)
 
 #### TensorFlow Project Template（TensorFlow 项目模版）
 * [Based on TF Estimator](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
