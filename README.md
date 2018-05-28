@@ -123,4 +123,6 @@
 * [Course Notes](https://github.com/zhedongzheng/finch/blob/master/notes/kg/notes.md)
 
 #### TensorFlow Project Template（TensorFlow 项目模版）
-* [Based on TF Estimator](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
+* [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
+
+* [TF Dataset Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_dataset_template)
