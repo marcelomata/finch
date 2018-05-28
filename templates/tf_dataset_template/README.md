@@ -14,7 +14,7 @@
 │   └── example.py
 │
 ├── mains              
-│   └── example.py  
+│   └── example.py  # this is the file you are going to run
 │  
 ├── model              
 │   └── example.py  
