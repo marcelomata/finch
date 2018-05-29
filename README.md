@@ -5,7 +5,7 @@
 
 * Good TensorFlow practice under [tf.data](https://www.tensorflow.org/api_docs/python/tf/data) and [tf.estimator](https://www.tensorflow.org/api_docs/python/tf/estimator) interfaces
 
-* Many clean jupyter notebooks
+* Lots of clean Jupyter Notebooks
 
 ---
 #### Contents
