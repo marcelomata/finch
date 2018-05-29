@@ -3,9 +3,9 @@
 ---
 #### Why This Project?
 
-* Good TensorFlow programming practice under [tf.data](https://www.tensorflow.org/api_docs/python/tf/data) and [tf.estimator](https://www.tensorflow.org/api_docs/python/tf/estimator) interfaces
+* Good TensorFlow practice under [tf.data](https://www.tensorflow.org/api_docs/python/tf/data) and [tf.estimator](https://www.tensorflow.org/api_docs/python/tf/estimator) interfaces
 
-* Displayed in clean Jupyter Notebooks
+* Most displayed in clean Jupyter Notebooks
 
 ---
 #### Contents
