@@ -69,7 +69,7 @@
 
     * VAE &nbsp; &nbsp; [Notebook](https://nbviewer.jupyter.org/github/zhedongzheng/finch/tree/master/nlp-models/tensorflow/vae/train.ipynb)
     
-    * Control-VAE &nbsp; &nbsp; [Folder](https://github.com/zhedongzheng/finch/tree/master/nlp-models/tensorflow/toward_control)
+    * Controlled VAE &nbsp; &nbsp; [Folder](https://github.com/zhedongzheng/finch/tree/master/nlp-models/tensorflow/toward_control)
 
 * Speech Recognition（语音识别）
 
