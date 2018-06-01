@@ -16,9 +16,9 @@ class Encoder(BaseModel):
             self.proj_z_logvar = tf.layers.Dense(args.latent_size)
     
 
-    def forward(self, inputs, gumbel_inp=False):
+    def forward(self, inputs, soft_inp=False):
         with tf.variable_scope(self._scope):
-            if gumbel_inp:
+            if soft_inp:
                 _inputs = tf.reshape(inputs, [-1, args.vocab_size])
                 x = tf.matmul(_inputs, self.embedding)
                 batch_sz = tf.shape(inputs)[0]
@@ -27,7 +27,7 @@ class Encoder(BaseModel):
                 x = tf.nn.embedding_lookup(self.embedding, inputs)
             _, enc_state = tf.nn.dynamic_rnn(self.rnn_cell,
                                              x,
-                                             None if gumbel_inp else tf.count_nonzero(inputs, 1),
+                                             None if soft_inp else tf.count_nonzero(inputs, 1),
                                              dtype=tf.float32)
             z_mean = self.proj_z_mean(enc_state)
             z_logvar = self.proj_z_logvar(enc_state)

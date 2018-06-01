@@ -22,9 +22,9 @@ class Discriminator(BaseModel):
             self.build_predict_graph(dataloader)
     
 
-    def forward(self, inputs, is_training, gumbel_inp=False):
+    def forward(self, inputs, is_training, soft_inp=False):
         with tf.variable_scope(self._scope):
-            if gumbel_inp:
+            if soft_inp:
                 _inputs = tf.reshape(inputs, [-1, args.vocab_size])
                 x = tf.matmul(_inputs, self.embedding)
                 batch_sz = tf.shape(inputs)[0]

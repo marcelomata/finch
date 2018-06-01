@@ -29,7 +29,7 @@ class WakeSleepTrainer(BaseTrainer):
         for epoch in range(1, args.n_epochs+1):
             while True:
                 try:
-                    (_, step, d_loss, clf_loss, L_u, clf_acc,
+                    (_, step, d_loss, clf_loss, L_u, entropy, clf_acc,
                      _, e_loss, kl_w, kl_loss, nll_loss,
                      _, g_loss, temper, l_attr_c, l_attr_z) = self.sess.run(
                         [self.model.ops['discri']['train'],
@@ -37,6 +37,7 @@ class WakeSleepTrainer(BaseTrainer):
                          self.model.ops['discri']['loss'],
                          self.model.ops['discri']['clf_loss'],
                          self.model.ops['discri']['L_u'],
+                         self.model.ops['discri']['entropy'],
                          self.model.ops['discri']['clf_acc'],
                          self.model.ops['encoder']['train'],
                          self.model.ops['encoder']['loss'],
@@ -53,8 +54,8 @@ class WakeSleepTrainer(BaseTrainer):
                     break
                 else:
                     if step % args.wake_sleep_display_step == 0 or step == 1:
-                        tf.logging.info("\nDiscriminator | Epoch [%d/%d] | Step %d | loss: %.3f\nclf_loss: %.3f | L_u: %.3f | clf_acc: %.3f\n" % (
-                            epoch, args.n_epochs, step, d_loss, clf_loss, L_u, clf_acc))
+                        tf.logging.info("\nDiscriminator | Epoch [%d/%d] | Step %d | loss: %.3f\nclf_loss: %.3f | clf_acc: %.3f | L_u: %.3f | entropy: %.3f\n" % (
+                            epoch, args.n_epochs, step, d_loss, clf_loss, clf_acc, L_u, entropy))
                 
                         tf.logging.info("\nEncoder | Epoch [%d/%d] | Step %d | loss: %.3f\nkl_w: %.3f | kl_loss: %.3f | nll_loss: %.3f\n" % (
                             epoch, args.n_epochs, step, e_loss, kl_w, kl_loss, nll_loss))

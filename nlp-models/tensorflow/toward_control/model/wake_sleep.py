@@ -1,6 +1,5 @@
 from base import BaseModel
 from configs import args
-from utils import gumbel_softmax_sample
 
 from .vae import VAE
 from .discriminator import Discriminator
@@ -46,9 +45,9 @@ class WakeSleepController(BaseModel):
         ids_gen = tf.reshape(ids_gen, [batch_sz, args.max_len+1])
 
         logits_fake = self.discriminator.forward(ids_gen, is_training=False)
-        entropy = - tf.reduce_sum(tf.log(tf.nn.softmax(logits_fake)))
+        self.ops['discri']['entropy'] = - tf.reduce_sum(tf.log(tf.nn.softmax(logits_fake)))
         self.ops['discri']['L_u'] = self.cross_entropy_fn(
-            logits_fake, c_prior) + args.beta * entropy
+            logits_fake, c_prior) + args.beta * self.ops['discri']['entropy']
 
         self.ops['discri']['loss'] = self.ops['discri']['clf_loss'] + args.lambda_u * self.ops['discri']['L_u']
         self.ops['discri']['train'] = self.optimizer.minimize(
@@ -72,12 +71,14 @@ class WakeSleepController(BaseModel):
         latent_vec = tf.concat((z_prior, c_prior), -1)
         _, logits_gen = self.vae.generator.forward(latent_vec, is_training=True, dec_inp=dec_inp)
         self.ops['generator']['temperature'] = self.temperature_fn()
-        gumbel = gumbel_softmax_sample(logits_gen[:, :-1, :], self.ops['generator']['temperature'])
+        
+        x_hat = tf.nn.softmax(logits_gen[:, :-1, :] / self.ops['generator']['temperature'])
 
-        c_logits = self.discriminator.forward(gumbel, is_training=False, gumbel_inp=True)
+        c_logits = self.discriminator.forward(x_hat, is_training=False, soft_inp=True)
         self.ops['generator']['l_attr_c'] = self.cross_entropy_fn(c_logits, c_prior)
-        z_mean_gen, z_logvar_gen = self.vae.encoder.forward(gumbel, gumbel_inp=True)
-        self.ops['generator']['l_attr_z'] = self.mutinfo_loss_fn(z_mean_gen, z_logvar_gen, z_prior)
+        z_mean_gen, z_logvar_gen = self.vae.encoder.forward(x_hat, soft_inp=True)
+        self.ops['generator']['l_attr_z'] = self.mutinfo_loss_fn(
+            z_mean_gen, z_logvar_gen, z_prior)
         
         self.ops['encoder']['loss'] = self.ops['vae']['loss']
         self.ops['generator']['loss'] = self.ops['vae']['loss'] + (
@@ -116,7 +117,6 @@ class WakeSleepController(BaseModel):
 
 
     def build_vae_loss(self, rnn_output, z_mean, z_logvar, dec_out):
-        #self.ops['vae']['kl_w'] = self.vae.kl_w_fn(self.ops['global_step'])
         self.ops['vae']['kl_w'] = tf.constant(1.0)
 
         self.ops['vae']['kl_loss'] = self.vae.kl_loss_fn(z_mean, z_logvar)
@@ -152,17 +152,18 @@ class WakeSleepController(BaseModel):
             tf.to_float(self.ops['global_step']) - tf.constant(args.temp_anneal_bias / 2)))
 
 
-    def mutinfo_loss_fn(self, z_mean_new, z_logvar_new, z_prior, epsilon=tf.constant(1e-8)):
-        distribution = tf.contrib.distributions.MultivariateNormalDiag(
-            z_mean_new, tf.exp(z_logvar_new), validate_args=True)
-        mutinfo_loss = -tf.log(tf.add(epsilon, distribution.prob(z_prior)))
+    def mutinfo_loss_fn(self, z_mean_new, z_logvar_new, z_prior):
+        dist = tf.contrib.distributions.MultivariateNormalDiag(z_mean_new,
+                                                               tf.exp(z_logvar_new),
+                                                               validate_args=True)
+        mutinfo_loss = - dist.log_prob(z_prior)
         return tf.reduce_sum(mutinfo_loss) / tf.to_float(tf.shape(z_prior)[1])
 
 
     def init_saver(self):
-        self.saver = tf.train.Saver(
-            tf.trainable_variables(self.vae.encoder._scope)+tf.trainable_variables(self.vae.generator._scope),
-            max_to_keep=1)
+        enc_vars = tf.trainable_variables(self.vae.encoder._scope)
+        gen_vars = tf.trainable_variables(self.vae.generator._scope)
+        self.saver = tf.train.Saver(enc_vars+gen_vars, max_to_keep=1)
         p = os.path.dirname(args.vae_ckpt_dir)
         if not os.path.exists(p):
             os.makedirs(p)
