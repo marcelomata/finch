@@ -15,6 +15,7 @@ Implementing the idea of [Toward Controlled Generation of Text](https://arxiv.or
 │   └── imdb        
 │       └── vae_pipeline.py
 │       └── wake_sleep_pipeline.py
+│       └── discriminator_pipeline.py
 │
 ├── log             
 │   └── example.py
@@ -35,7 +36,6 @@ Implementing the idea of [Toward Controlled Generation of Text](https://arxiv.or
 │   └── wake_sleep_trainer.py
 │
 ├── utils             
-│   └── gumbel.py
 │   └── modified.py
 │
 ├── vocab
