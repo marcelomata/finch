@@ -129,4 +129,4 @@
 
 #### Resource（资源）
 * 应用
-    * [NLP在百度的应用](https://github.com/zhedongzheng/finch/blob/master/notes/application/baidu_nlp.pdf)
+    * [NLP在百度的应用（13年）](https://github.com/zhedongzheng/finch/blob/master/notes/application/baidu_nlp.pdf)
