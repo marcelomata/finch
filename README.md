@@ -127,6 +127,6 @@
 
 * [TF Dataset Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_dataset_template)
 
-#### 资料整理
+#### Resource（资源）
 * 应用
     * [NLP在百度的应用](https://github.com/zhedongzheng/finch/blob/master/notes/application/baidu_nlp.pdf)
