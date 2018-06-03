@@ -129,5 +129,3 @@
 
 #### Application（应用）
 * [NLP在百度的应用](https://github.com/zhedongzheng/finch/blob/master/notes/application/baidu_nlp.pdf)
-的
-的
