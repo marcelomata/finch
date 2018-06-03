@@ -49,8 +49,8 @@ Translation from Chinese to English is done by [Zhedong Zheng](https://github.co
         
           RDF is also a graphical model to link the descriptions of resources
           
-          RDF三元组可以被认为是图上的有方向单元（结点，箭头，结点）
+          RDF三元组可以被认为是图上的结点 + 箭头 + 结点
           
-          RDF triples can be seen as arcs of a graph (vertex, edge, vertex)
+          RDF triples can be seen as arcs of a graph (vertex + edge + vertex)
  
     * OWL
