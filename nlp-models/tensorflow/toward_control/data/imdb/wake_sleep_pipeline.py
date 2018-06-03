@@ -13,7 +13,7 @@ def word_dropout(x, vocab):
 
 def pipeline_train(enc_inp, dec_inp, dec_out, sess):
     dataset = tf.data.Dataset.from_tensor_slices((enc_inp, dec_inp, dec_out))
-    dataset = dataset.batch(args.batch_size)
+    dataset = dataset.shuffle(len(enc_inp)).batch(args.batch_size)
     iterator = dataset.make_initializable_iterator()
 
     enc_inp_ph = tf.placeholder(tf.int32, [None, args.max_len])

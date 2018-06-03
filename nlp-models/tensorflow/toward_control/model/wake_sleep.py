@@ -46,7 +46,7 @@ class WakeSleepController(BaseModel):
         ids_gen = self.vae.generator.forward(latent_vec, is_training=False)
         ids_gen = tf.reshape(ids_gen, [batch_sz, args.max_len+1])
 
-        logits_fake = self.discriminator.forward(ids_gen, is_training=False)
+        logits_fake = self.discriminator.forward(ids_gen, is_training=True)
         self.ops['discri']['entropy'] = - tf.reduce_sum(tf.log(tf.nn.softmax(logits_fake)))
         self.ops['discri']['L_u'] = self.cross_entropy_fn(
             logits_fake, c_prior) + args.beta * self.ops['discri']['entropy']
@@ -72,7 +72,9 @@ class WakeSleepController(BaseModel):
         c_prior = self.vae.draw_c_prior(batch_sz)
         latent_vec = tf.concat((z_prior, c_prior), -1)
         _, logits_gen = self.vae.generator.forward(latent_vec, is_training=True, dec_inp=dec_inp)
-        self.ops['generator']['temperature'] = self.temperature_fn()
+
+        temper = self.temperature_fn()
+        self.ops['generator']['temperature'] = tf.cond(temper<1e-3, lambda: 1e-3, lambda: temper)
         
         x_hat = tf.nn.softmax(logits_gen[:, :-1, :] / self.ops['generator']['temperature'])
 

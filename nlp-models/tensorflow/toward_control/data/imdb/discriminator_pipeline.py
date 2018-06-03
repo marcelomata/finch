@@ -9,7 +9,7 @@ MAXLEN = 400
 
 def pipeline_train(enc_inp, labels, sess):
     dataset = tf.data.Dataset.from_tensor_slices((enc_inp, labels))
-    dataset = dataset.batch(args.batch_size)
+    dataset = dataset.shuffle(len(labels)).batch(args.batch_size)
     iterator = dataset.make_initializable_iterator()
 
     enc_inp_ph = tf.placeholder(tf.int32, [None, MAXLEN])
