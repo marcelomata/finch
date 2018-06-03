@@ -20,8 +20,10 @@ def demo(test_strs, pred_ids, reve_ids, vocab):
 
 
 class WakeSleepTrainer(BaseTrainer):
-    def __init__(self, sess, model, dataloader, vocab):
-        super().__init__(sess, model, dataloader)
+    def __init__(self, sess, model, discri_dl, wake_sleep_dl, vocab):
+        super().__init__(sess, model)
+        self.discri_dl = discri_dl
+        self.wake_sleep_dl = wake_sleep_dl
         self.vocab = vocab
 
 
@@ -29,9 +31,7 @@ class WakeSleepTrainer(BaseTrainer):
         for epoch in range(1, args.n_epochs+1):
             while True:
                 try:
-                    (_, step, d_loss, clf_loss, L_u, entropy, clf_acc,
-                     _, e_loss, kl_w, kl_loss, nll_loss,
-                     _, g_loss, temper, l_attr_c, l_attr_z) = self.sess.run(
+                    (_, step, d_loss, clf_loss, L_u, entropy, clf_acc) = self.sess.run(
                         [self.model.ops['discri']['train'],
                          self.model.ops['global_step'],
                          self.model.ops['discri']['loss'],
@@ -39,7 +39,11 @@ class WakeSleepTrainer(BaseTrainer):
                          self.model.ops['discri']['L_u'],
                          self.model.ops['discri']['entropy'],
                          self.model.ops['discri']['clf_acc'],
-                         self.model.ops['encoder']['train'],
+                    ])
+
+                    (_, e_loss, kl_w, kl_loss, nll_loss,
+                     _, g_loss, temper, l_attr_c, l_attr_z) = self.sess.run(
+                        [self.model.ops['encoder']['train'],
                          self.model.ops['encoder']['loss'],
                          self.model.ops['vae']['kl_w'],
                          self.model.ops['vae']['kl_loss'],
@@ -73,5 +77,7 @@ class WakeSleepTrainer(BaseTrainer):
                         demo(test_strs, pred_ids, reve_ids, self.vocab)
                 
             if epoch != args.n_epochs:
-                self.sess.run(self.dataloader.train_iterator.initializer,
-                              self.dataloader.train_init_dict)
+                self.sess.run(self.discri_dl.train_iterator.initializer,
+                              self.discri_dl.train_init_dict)
+                self.sess.run(self.wake_sleep_dl.train_iterator.initializer,
+                              self.wake_sleep_dl.train_init_dict)

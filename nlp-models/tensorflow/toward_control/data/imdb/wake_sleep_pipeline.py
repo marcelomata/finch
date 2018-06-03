@@ -11,20 +11,18 @@ def word_dropout(x, vocab):
     return fn(x, is_dropped)
 
 
-def pipeline_train(enc_inp, dec_inp, dec_out, labels, sess):
-    dataset = tf.data.Dataset.from_tensor_slices((enc_inp, dec_inp, dec_out, labels))
-    dataset = dataset.shuffle(len(enc_inp)).batch(args.batch_size)
+def pipeline_train(enc_inp, dec_inp, dec_out, sess):
+    dataset = tf.data.Dataset.from_tensor_slices((enc_inp, dec_inp, dec_out))
+    dataset = dataset.batch(args.batch_size)
     iterator = dataset.make_initializable_iterator()
 
     enc_inp_ph = tf.placeholder(tf.int32, [None, args.max_len])
     dec_inp_ph = tf.placeholder(tf.int32, [None, args.max_len+1])
     dec_out_ph = tf.placeholder(tf.int32, [None, args.max_len+1])
-    labels_ph = tf.placeholder(tf.int32, [None])
 
     init_dict = {enc_inp_ph: enc_inp,
                  dec_inp_ph: dec_inp,
-                 dec_out_ph: dec_out,
-                 labels_ph: labels}
+                 dec_out_ph: dec_out}
                  
     sess.run(iterator.initializer, init_dict)
     
@@ -41,7 +39,6 @@ class WakeSleepDataLoader(object):
             num_words=args.vocab_size, index_from=4)
         
         X = np.concatenate((X_train, X_test))
-        y = np.concatenate((y_train, y_test))
 
         X = tf.keras.preprocessing.sequence.pad_sequences(
                 X, args.max_len+1, truncating='pre', padding='post')
@@ -51,4 +48,4 @@ class WakeSleepDataLoader(object):
         dec_out = np.concatenate([X[:, 1:], np.full([X.shape[0], 1], vocab.word2idx['<end>'])], 1)
 
         self.train_iterator, self.train_init_dict = pipeline_train(
-            enc_inp, dec_inp, dec_out, y, sess)
+            enc_inp, dec_inp, dec_out, sess)

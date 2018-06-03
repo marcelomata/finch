@@ -9,7 +9,7 @@ import os
 
 
 class WakeSleepController(BaseModel):
-    def __init__(self, dataloader, vocab):
+    def __init__(self, discri_dl, wake_sleep_dl, vocab):
         super().__init__('WakeSleepController')
         self.vae = VAE(dataloader=None, vocab=vocab, build_graph=False)
         self.discriminator = Discriminator(build_graph=False)
@@ -22,9 +22,11 @@ class WakeSleepController(BaseModel):
 
         self.ops['global_step'] = tf.Variable(0, trainable=False)
         self.optimizer = tf.train.AdamOptimizer()
-        enc_inp, dec_inp, dec_out, labels = dataloader.train_iterator.get_next()
         
+        enc_inp, labels = discri_dl.train_iterator.get_next()
         self.build_discriminator_graph(enc_inp, labels)
+
+        enc_inp, dec_inp, dec_out = wake_sleep_dl.train_iterator.get_next()
         self.build_encoder_generator_graph(enc_inp, dec_inp, dec_out)
         self.build_inference_graph()
         self.init_saver()
@@ -85,11 +87,10 @@ class WakeSleepController(BaseModel):
             args.lambda_c * self.ops['generator']['l_attr_c']) + (
                 args.lambda_z * self.ops['generator']['l_attr_z'])
 
-        with tf.control_dependencies([self.ops['discri']['train']]):
-            self.ops['encoder']['train'] = self.optimizer.apply_gradients(
-                self.clip_grads(self.ops['encoder']['loss'], self.vae.encoder._scope))
-            self.ops['generator']['train'] = self.optimizer.apply_gradients(
-                self.clip_grads(self.ops['generator']['loss'], self.vae.generator._scope))
+        self.ops['encoder']['train'] = self.optimizer.apply_gradients(
+            self.clip_grads(self.ops['encoder']['loss'], self.vae.encoder._scope))
+        self.ops['generator']['train'] = self.optimizer.apply_gradients(
+            self.clip_grads(self.ops['generator']['loss'], self.vae.generator._scope))
        
     
     def build_inference_graph(self):

@@ -1,3 +1,4 @@
+Implementing the idea of [Toward Controlled Generation of Text](https://arxiv.org/abs/1703.00955?context=cs)
 
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/control-vae.png" height='300'>
 
