@@ -104,11 +104,11 @@
 
     * Pointer Network &nbsp; &nbsp; [Notebook](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/nlp-models/tensorflow/tf-estimator/pointer_net_test.ipynb)
 
-    * Attention Is All You Need &nbsp; &nbsp; [Notebook](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/nlp-models/tensorflow/attn_is_all_u_need/train_letters.ipynb)
+    * Transformer &nbsp; &nbsp; [Notebook](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/nlp-models/tensorflow/attn_is_all_u_need/train_letters.ipynb)
     
 * Learning to Dialog（机器对话）
 
-    * Attention Is All You Need &nbsp; &nbsp; [Notebook](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/nlp-models/tensorflow/attn_is_all_u_need/train_dialog.ipynb)
+    * Transformer &nbsp; &nbsp; [Notebook](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/nlp-models/tensorflow/attn_is_all_u_need/train_dialog.ipynb)
         
 #### Question Answering（问题回答）
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/dmn-details.png" height='100'>
@@ -128,6 +128,10 @@
 * [TF Dataset Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_dataset_template)
 
 #### Resource（资源）
-* Application（应用）
+* Books（教材）
+    
+    * [Natural Language Processing - Jacob Eisenstein](https://github.com/jacobeisenstein/gt-nlp-class/tree/master/notes)
+
+* Applications（应用）
 
     * [NLP在百度的应用（13年）](https://github.com/zhedongzheng/finch/blob/master/notes/application/baidu_nlp.pdf)
