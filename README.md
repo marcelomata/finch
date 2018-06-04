@@ -130,7 +130,7 @@
 #### Resource（资源）
 * Books（教材）
     
-    * [Natural Language Processing - Jacob Eisenstein](https://github.com/jacobeisenstein/gt-nlp-class/tree/master/notes)
+    * [NLP - Jacob Eisenstein](https://github.com/jacobeisenstein/gt-nlp-class/tree/master/notes)
 
 * Applications（应用）
 
