@@ -17,7 +17,7 @@
 * [Sequence to Sequence（序列到序列）](https://github.com/zhedongzheng/finch#sequence-to-sequence%E5%BA%8F%E5%88%97%E5%88%B0%E5%BA%8F%E5%88%97)
 * [Question Answering（问题回答）](https://github.com/zhedongzheng/finch/blob/master/README.md#question-answering%E9%97%AE%E9%A2%98%E5%9B%9E%E7%AD%94)
 * [Knowledge Graph（知识图谱）](https://github.com/zhedongzheng/finch#knowledge-graph%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1)
-* [TensorFlow Project Template（TensorFlow 项目模版）](https://github.com/zhedongzheng/finch/blob/master/README.md#tensorflow-project-templatetensorflow-%E9%A1%B9%E7%9B%AE%E6%A8%A1%E7%89%88)
+* [TensorFlow Detail（TensorFlow 细节）](https://github.com/zhedongzheng/finch/blob/master/README.md#tensorflow-project-templatetensorflow-%E9%A1%B9%E7%9B%AE%E6%A8%A1%E7%89%88)
 
 ---
 #### Requirements 
@@ -126,7 +126,9 @@
 
 * Link Prediction（关系预测）
 
-#### TensorFlow Project Template（TensorFlow 项目模版）
-* [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
+#### TensorFlow Detail（TensorFlow 细节）
+* Project Template（项目模版）
 
-* [TF Dataset Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_dataset_template)
+    * [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
+
+    * [TF Dataset Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_dataset_template)
