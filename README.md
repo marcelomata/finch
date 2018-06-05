@@ -127,6 +127,10 @@
 * Link Prediction（关系预测）
 
 #### TensorFlow Detail（TensorFlow 细节）
+* Importing Data (输入数据)
+
+    * [TFRecord](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_fixed_len.ipynb)
+
 * Project Template（项目模版）
 
     * [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/tf/templates/tf_estimator_template)
