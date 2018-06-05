@@ -131,7 +131,7 @@
 #### TensorFlow Detail（TensorFlow 细节）
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/tf.png" height='150'>
 
-* Importing Data (输入数据)
+* Loading Data (导入数据)
 
     * [TFRecord: Fixed Length](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_fixed_len.ipynb)
     
