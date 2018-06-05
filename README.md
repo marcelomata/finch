@@ -124,6 +124,8 @@
 #### Knowledge Graph（知识图谱）
 * [Course Notes](https://github.com/zhedongzheng/finch/blob/master/notes/kg/notes.md)
 
+* Link Prediction
+
 #### TensorFlow Project Template（TensorFlow 项目模版）
 * [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
 
