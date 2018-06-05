@@ -122,6 +122,8 @@
     *  Dynamic Memory Network &nbsp; &nbsp; [Notebook](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/nlp-models/tensorflow/dmn/train.ipynb)
 
 #### Knowledge Graph（知识图谱）
+<img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/kg.png" height='100'>
+
 * [Course Notes](https://github.com/zhedongzheng/finch/blob/master/notes/kg/notes.md)
 
 * Link Prediction（关系预测）
