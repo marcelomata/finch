@@ -129,6 +129,6 @@
 #### TensorFlow Detail（TensorFlow 细节）
 * Project Template（项目模版）
 
-    * [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_estimator_template)
+    * [TF Estimator Template](https://github.com/zhedongzheng/finch/tree/master/tf/templates/tf_estimator_template)
 
-    * [TF Dataset Template](https://github.com/zhedongzheng/finch/tree/master/templates/tf_dataset_template)
+    * [TF Dataset Template](https://github.com/zhedongzheng/finch/tree/master/tf/templates/tf_dataset_template)
