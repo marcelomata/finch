@@ -129,7 +129,7 @@
 #### TensorFlow Detail（TensorFlow 细节）
 * Importing Data (输入数据)
 
-    * [TFRecord](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_fixed_len.ipynb)
+    * [Fixed Length TFRecord](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_fixed_len.ipynb)
 
 * Project Template（项目模版）
 
