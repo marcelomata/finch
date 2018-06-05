@@ -133,9 +133,9 @@
 
 * Importing Data (输入数据)
 
-    * [TFRecord Fixed Length](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_fixed_len.ipynb)
+    * [TFRecord: Fixed Length](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_fixed_len.ipynb)
     
-    * [TFRecord Padded Batch](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_var_len.ipynb)
+    * [TFRecord: Padded Batch](https://nbviewer.jupyter.org/github/zhedongzheng/finch/blob/master/tf/data_io/tfrecord_imdb_var_len.ipynb)
 
 * Project Template（项目模版）
 
