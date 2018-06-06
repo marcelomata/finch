@@ -3,28 +3,28 @@ from configs import args
 import tensorflow as tf
 
 
-def forward(x, reuse, is_training):
-    with tf.variable_scope('model', reuse=reuse):
-        x = tf.contrib.layers.embed_sequence(x, args.vocab_size, args.embed_dim)
-        x = tf.layers.dropout(x, 0.2, training=is_training)
-        feat_map = []
-        for k_size in [3, 4, 5]:
-            _x = tf.layers.conv1d(x, args.filters, k_size, activation=tf.nn.relu)
-            _x = tf.layers.max_pooling1d(_x, _x.get_shape().as_list()[1], 1)
-            _x = tf.reshape(_x, (tf.shape(x)[0], args.filters))
-            feat_map.append(_x)
-        x = tf.concat(feat_map, -1)
-        x = tf.layers.dense(x, args.filters, tf.nn.relu)
-        logits = tf.layers.dense(x, args.n_class)
+def forward(x, mode):
+    is_training = (mode == tf.estimator.ModeKeys.TRAIN)
+
+    x = tf.contrib.layers.embed_sequence(x, args.vocab_size, args.embed_dim)
+    x = tf.layers.dropout(x, 0.2, training=is_training)
+    feat_map = []
+    for k_size in [3, 4, 5]:
+        _x = tf.layers.conv1d(x, args.filters, k_size, activation=tf.nn.relu)
+        _x = tf.layers.max_pooling1d(_x, _x.get_shape().as_list()[1], 1)
+        _x = tf.reshape(_x, (tf.shape(x)[0], args.filters))
+        feat_map.append(_x)
+    x = tf.concat(feat_map, -1)
+    x = tf.layers.dense(x, args.filters, tf.nn.relu)
+    logits = tf.layers.dense(x, args.n_class)
     return logits
 
 
-def model_fn(features, labels, mode, params):
-    logits = forward(features, reuse=False, is_training=True)
-    preds = forward(features, reuse=True, is_training=False)
+def model_fn(features, labels, mode):
+    logits = forward(features, mode)
     
     if mode == tf.estimator.ModeKeys.PREDICT:
-        preds = tf.argmax(preds, -1)
+        preds = tf.argmax(logits, -1)
         return tf.estimator.EstimatorSpec(mode, predictions=preds)
     
     if mode == tf.estimator.ModeKeys.TRAIN:
