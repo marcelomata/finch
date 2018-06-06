@@ -35,7 +35,7 @@ class WakeSleepController(BaseModel):
     def build_discriminator_graph(self, enc_inp, labels):
         batch_sz = tf.shape(enc_inp)[0]
         
-        logits_real = self.discriminator.forward(enc_inp, is_training=True)
+        logits_real = self.discriminator(enc_inp, is_training=True)
         self.ops['discri']['clf_loss'] = self.sparse_cross_entropy_fn(logits_real, labels)
         acc = tf.equal(tf.argmax(logits_real, -1), labels)
         self.ops['discri']['clf_acc'] = tf.reduce_mean(tf.to_float(acc))
@@ -43,10 +43,10 @@ class WakeSleepController(BaseModel):
         c_prior = self.vae.draw_c_prior(batch_sz)
         z_prior = self.vae.draw_z_prior(batch_sz)                
         latent_vec = tf.concat((z_prior, c_prior), -1)
-        ids_gen = self.vae.generator.forward(latent_vec, is_training=False)
+        ids_gen = self.vae.generator(latent_vec, is_training=False)
         ids_gen = tf.reshape(ids_gen, [batch_sz, args.max_len+1])
 
-        logits_fake = self.discriminator.forward(ids_gen, is_training=True)
+        logits_fake = self.discriminator(ids_gen, is_training=True)
         self.ops['discri']['entropy'] = - tf.reduce_sum(tf.log(tf.nn.softmax(logits_fake)))
         self.ops['discri']['L_u'] = self.cross_entropy_fn(
             logits_fake, c_prior) + args.beta * self.ops['discri']['entropy']
@@ -61,26 +61,26 @@ class WakeSleepController(BaseModel):
     def build_encoder_generator_graph(self, enc_inp, dec_inp, dec_out):
         batch_sz = tf.shape(enc_inp)[0]
 
-        z_mean, z_logvar = self.vae.encoder.forward(enc_inp)
+        z_mean, z_logvar = self.vae.encoder(enc_inp)
         z = self.vae.reparam_trick(z_mean, z_logvar)
-        c = self.vae.draw_c(self.discriminator.forward(enc_inp, is_training=False))
+        c = self.vae.draw_c(self.discriminator(enc_inp, is_training=False))
         latent_vec = tf.concat((z, c), -1)
-        rnn_output, _ = self.vae.generator.forward(latent_vec, is_training=True, dec_inp=dec_inp)
+        rnn_output, _ = self.vae.generator(latent_vec, is_training=True, dec_inp=dec_inp)
         self.build_vae_loss(rnn_output, z_mean, z_logvar, dec_out)
 
         z_prior = self.vae.draw_z_prior(batch_sz)
         c_prior = self.vae.draw_c_prior(batch_sz)
         latent_vec = tf.concat((z_prior, c_prior), -1)
-        _, logits_gen = self.vae.generator.forward(latent_vec, is_training=True, dec_inp=dec_inp)
+        _, logits_gen = self.vae.generator(latent_vec, is_training=True, dec_inp=dec_inp)
 
         temper = self.temperature_fn()
         self.ops['generator']['temperature'] = tf.cond(temper<1e-3, lambda: 1e-3, lambda: temper)
         
         x_hat = tf.nn.softmax(logits_gen[:, :-1, :] / self.ops['generator']['temperature'])
 
-        c_logits = self.discriminator.forward(x_hat, is_training=False, soft_inp=True)
+        c_logits = self.discriminator(x_hat, is_training=False, soft_inp=True)
         self.ops['generator']['l_attr_c'] = self.cross_entropy_fn(c_logits, c_prior)
-        z_mean_gen, z_logvar_gen = self.vae.encoder.forward(x_hat, soft_inp=True)
+        z_mean_gen, z_logvar_gen = self.vae.encoder(x_hat, soft_inp=True)
         self.ops['generator']['l_attr_z'] = self.mutinfo_loss_fn(
             z_mean_gen, z_logvar_gen, z_prior)
         
@@ -98,15 +98,15 @@ class WakeSleepController(BaseModel):
     def build_inference_graph(self):
         self.ops['infe_ph'] = tf.placeholder(tf.int32, [None, args.max_len])
 
-        z_mean, z_logvar = self.vae.encoder.forward(self.ops['infe_ph'])
+        z_mean, z_logvar = self.vae.encoder(self.ops['infe_ph'])
         z = self.vae.reparam_trick(z_mean, z_logvar)
-        c = self.vae.draw_c(self.discriminator.forward(self.ops['infe_ph'], is_training=False))
+        c = self.vae.draw_c(self.discriminator(self.ops['infe_ph'], is_training=False))
 
         latent_vec = tf.concat((z, c), -1)
         reversed_vec = tf.concat((z, 1-c), -1)
 
-        self.ops['infe_ids']['direct'] = self.vae.generator.forward(latent_vec, is_training=False)
-        self.ops['infe_ids']['reversed'] = self.vae.generator.forward(reversed_vec, is_training=False)
+        self.ops['infe_ids']['direct'] = self.vae.generator(latent_vec, is_training=False)
+        self.ops['infe_ids']['reversed'] = self.vae.generator(reversed_vec, is_training=False)
 
 
     def sparse_cross_entropy_fn(self, logits, labels):

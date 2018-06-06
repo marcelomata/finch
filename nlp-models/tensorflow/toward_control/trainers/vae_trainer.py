@@ -20,7 +20,8 @@ def demo(test_strs, pred_ids, vocab):
 
 class VAETrainer(BaseTrainer):
     def __init__(self, sess, model, dataloader, vocab):
-        super().__init__(sess, model, dataloader)
+        super().__init__(sess, model)
+        self.dataloader = dataloader
         self.vocab = vocab
 
 

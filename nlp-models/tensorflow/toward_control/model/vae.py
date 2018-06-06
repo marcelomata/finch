@@ -64,14 +64,14 @@ class VAE(BaseModel):
         enc_inp, dec_inp, dec_out = dataloader.train_iterator.get_next()
         batch_sz = tf.shape(enc_inp)[0]
 
-        z_mean, z_logvar = self.encoder.forward(enc_inp)
+        z_mean, z_logvar = self.encoder(enc_inp)
         z = self.reparam_trick(z_mean, z_logvar)
         c = self.draw_c_prior(batch_sz)
 
         latent_vec = tf.concat((z, c), -1)
-        rnn_output, _ = self.generator.forward(latent_vec,
-                                               is_training = True,
-                                               dec_inp = dec_inp)
+        rnn_output, _ = self.generator(latent_vec,
+                                       is_training = True,
+                                       dec_inp = dec_inp)
 
         self.ops['global_step'] = tf.Variable(0, trainable=False)
 
@@ -102,9 +102,9 @@ class VAE(BaseModel):
     def build_inference_graph(self):
         self.ops['infe_ph'] = tf.placeholder(tf.int32, [None, args.max_len])
 
-        z_mean, z_logvar = self.encoder.forward(self.ops['infe_ph'])
+        z_mean, z_logvar = self.encoder(self.ops['infe_ph'])
         z = self.reparam_trick(z_mean, z_logvar)
         c = self.draw_c_prior(tf.shape(self.ops['infe_ph'])[0])
 
         latent_vec = tf.concat((z, c), -1)
-        self.ops['infe_pred_ids'] = self.generator.forward(latent_vec, is_training=False)
+        self.ops['infe_pred_ids'] = self.generator(latent_vec, is_training=False)

@@ -4,7 +4,7 @@ from configs import args
 import tensorflow as tf
 
 
-class Discriminator(BaseModel):
+class _Discriminator(BaseModel):
     def __init__(self, build_graph=True):
         super().__init__('Discriminator')
 
@@ -19,7 +19,7 @@ class Discriminator(BaseModel):
             self.build_predict_graph(dataloader)
     
 
-    def forward(self, inputs, is_training, soft_inp=False):
+    def __call__(self, inputs, is_training, soft_inp=False):
         with tf.variable_scope(self._scope):
             if soft_inp:
                 _inputs = tf.reshape(inputs, [-1, args.vocab_size])
@@ -38,7 +38,7 @@ class Discriminator(BaseModel):
     
 
 
-class _Discriminator(BaseModel):
+class Discriminator(BaseModel):
     def __init__(self, build_graph=True):
         super().__init__('Discriminator')
 
@@ -57,7 +57,7 @@ class _Discriminator(BaseModel):
             self.build_predict_graph(dataloader)
     
 
-    def forward(self, inputs, is_training, soft_inp=False):
+    def __call__(self, inputs, is_training, soft_inp=False):
         with tf.variable_scope(self._scope):
             if soft_inp:
                 _inputs = tf.reshape(inputs, [-1, args.vocab_size])

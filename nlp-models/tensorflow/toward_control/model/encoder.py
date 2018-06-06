@@ -16,7 +16,7 @@ class Encoder(BaseModel):
             self.proj_z_logvar = tf.layers.Dense(args.latent_size)
     
 
-    def forward(self, inputs, soft_inp=False):
+    def __call__(self, inputs, soft_inp=False):
         with tf.variable_scope(self._scope):
             if soft_inp:
                 _inputs = tf.reshape(inputs, [-1, args.vocab_size])

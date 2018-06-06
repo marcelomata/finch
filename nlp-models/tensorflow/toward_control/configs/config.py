@@ -3,7 +3,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--batch_size', type=int, default=128)
-parser.add_argument('--n_epochs', type=int, default=30)
+parser.add_argument('--n_epochs', type=int, default=10)
 
 parser.add_argument('--vocab_size', type=int, default=20000)
 parser.add_argument('--num_sampled', type=int, default=1000)

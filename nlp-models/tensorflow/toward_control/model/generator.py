@@ -10,17 +10,15 @@ class Generator(BaseModel):
         super().__init__('Generator')
         self.vocab = vocab
 
-        with tf.variable_scope('Encoder', reuse=True):
-            self.embedding = tf.get_variable('lookup_table', [vocab.vocab_size, args.embed_dims])
-
         with tf.variable_scope(self._scope):
+            self.embedding = tf.get_variable('lookup_table', [vocab.vocab_size, args.embed_dims])
             self.dec_cell = tf.nn.rnn_cell.GRUCell(args.rnn_size,
                                                    kernel_initializer=tf.orthogonal_initializer())
             self.state_proj = tf.layers.Dense(args.rnn_size, tf.nn.elu)
             self.output_proj = tf.layers.Dense(vocab.vocab_size, _scope='decoder/output_proj')
     
 
-    def forward(self, latent_vec, is_training, dec_inp=None):
+    def __call__(self, latent_vec, is_training, dec_inp=None):
         with tf.variable_scope(self._scope):
             init_state = self.state_proj(latent_vec)
             batch_sz = tf.shape(init_state)[0]
