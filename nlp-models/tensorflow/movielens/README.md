@@ -1,8 +1,10 @@
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/movielens.png">
 
+* The idea comes from [Here](http://www.paddlepaddle.org/docs/develop/book/05.recommender_system/index.html)
+
 * We need to switch to Python 2 for this sub-project
 
-    * Because we need to use [PaddlePaddle](http://www.paddlepaddle.org/) for well-processed Movielens data
+    * Because we need to use [PaddlePaddle](http://www.paddlepaddle.org/) for processed Movielens data
 
         * which only supports Python 2 for now
 
