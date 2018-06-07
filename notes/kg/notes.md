@@ -1,3 +1,6 @@
+Author: [Zhedong Zheng](https://github.com/zhedongzheng)
+
+---
 * Chapter 1 - Knowledge Graph Overview
 
     * From different perspectives to see KG
