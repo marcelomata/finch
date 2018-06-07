@@ -1,4 +1,4 @@
-Author: [Zhedong Zheng](https://github.com/zhedongzheng)
+Notes organized by: [Zhedong Zheng](https://github.com/zhedongzheng)
 
 ---
 * Chapter 1 - Knowledge Graph Overview
@@ -27,6 +27,26 @@ Author: [Zhedong Zheng](https://github.com/zhedongzheng)
         * RDF is also a graphical model to link the descriptions of resources
           
             * RDF triples can be seen as arcs of a graph (vertex + edge + vertex)
+            
+              <img src="img/p2.png" height='200'>
+        
+        * In RDF resources and properties are identified by URIs
+        
+          <img src="img/p3.png" height='200'>
+          
+        * In RDF values of properties can also be literals i.e. strings of characters
+        
+          <img src="img/p4.png" height='200'>
+        
+          (CCF ADL, Speaker, Haofen)
+          
+          (CCF ADL, theme, **"KG"**)
+        
+        * In RDF literal values of properties can also be typed with XML datatypes
+        
+            * For example, CCF ADL has one speaker Haofen and last 3 hours
+            
+              <img src="img/p5.png" height='200'>
         
         * Blank Nodes are allowed in RDF
         	
