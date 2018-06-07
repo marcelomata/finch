@@ -47,7 +47,7 @@ class WakeSleepController(BaseModel):
         ids_gen = tf.reshape(ids_gen, [batch_sz, args.max_len+1])
 
         logits_fake = self.discriminator(ids_gen, is_training=True)
-        self.ops['discri']['entropy'] = - tf.reduce_sum(tf.log(tf.nn.softmax(logits_fake)))
+        self.ops['discri']['entropy'] = - tf.reduce_sum(tf.nn.log_softmax(logits_fake))
         self.ops['discri']['L_u'] = self.cross_entropy_fn(
             logits_fake, c_prior) + args.beta * self.ops['discri']['entropy']
 
