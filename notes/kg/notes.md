@@ -23,7 +23,7 @@
           
         * RDF is also a graphical model to link the descriptions of resources
           
-          RDF triples can be seen as arcs of a graph (vertex + edge + vertex)
+            * RDF triples can be seen as arcs of a graph (vertex + edge + vertex)
  
     * OWL
 
