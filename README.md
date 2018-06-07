@@ -3,9 +3,9 @@
 ---
 #### Why This Project?
 
-* Good TensorFlow practice using [tf.data](https://www.tensorflow.org/api_docs/python/tf/data) and [tf.estimator](https://www.tensorflow.org/api_docs/python/tf/estimator) interfaces
+* Good TensorFlow practice using high-level interfaces: Layers, Datasets, Estimators
 
-* Lots of clean Jupyter Notebooks
+* Lots of clean Jupyter Notebooks to view and play with
 
 ---
 #### Contents
