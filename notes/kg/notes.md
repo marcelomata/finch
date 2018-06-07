@@ -1,10 +1,10 @@
 * Chapter 1 - Knowledge Graph Overview
 
-    * Essence of KG
+    * From different perspectives to see KG
 
-        * Web: similar to hyperlinks between text, build semantic links between data, and support semantic searching
+        * Web: similar to hyperlinks between text, build semantic links between data and support semantic searching
 
-        * NLP: how to extract semantic and structural data from text
+        * NLP: how to extract semantics and structural data from text
 
         * KR: how to use computational symbols to represent and process knowledge
 
