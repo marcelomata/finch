@@ -19,10 +19,11 @@ Implementing the idea of [Toward Controlled Generation of Text](https://arxiv.or
 │
 ├── log             
 │   └── example.py
+│   └── 2018-06-06 22:49:48.log   # sample of training process
 │
 ├── mains              
-│   └── pretrain.py   # first run this
-│   └── train.py      # then run this
+│   └── pretrain.py               # first run this
+│   └── train.py                  # then run this
 │  
 ├── model              
 │   └── discriminator.py
