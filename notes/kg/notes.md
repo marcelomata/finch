@@ -27,6 +27,18 @@ Author: [Zhedong Zheng](https://github.com/zhedongzheng)
         * RDF is also a graphical model to link the descriptions of resources
           
             * RDF triples can be seen as arcs of a graph (vertex + edge + vertex)
+        
+        * Blank Nodes are allowed in RDF
+        	
+        	  * A resource can be anonymous
+        	
+        	  * Not labelled by URI, labelled as _: xyz
+        	  
+        	  * For example, Haofen is the speaker of one (but not interested which one) KG conference
+ 
+ 				 <img src="img/p1.png" height='200'>
+ 				
+ 			      * This is 2-hop relationship
  
     * OWL
 
