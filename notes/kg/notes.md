@@ -1,4 +1,4 @@
----
+
 
 * Chapter 1 - Knowledge Graph Overview
 
@@ -28,4 +28,5 @@
           RDF triples can be seen as arcs of a graph (vertex + edge + vertex)
  
     * OWL
+
 ---
