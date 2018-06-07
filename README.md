@@ -3,9 +3,9 @@
 ---
 #### Why This Project?
 
-* Good TensorFlow practice using high-level interfaces: Layers, Datasets, Estimators
+* TF practice based on high-level interfaces: Layers, Datasets, Estimators
 
-* Lots of clean Jupyter Notebooks to view and play with
+* Lots of clean Notebooks to view and play with
 
 ---
 #### Contents
