@@ -38,7 +38,7 @@ Author: [Zhedong Zheng](https://github.com/zhedongzheng)
  
  				  <img src="img/p1.png" height='200'>
  				
- 			      * This is 2-hop relationship
+ 			      * This is a 2-hop relationship
  
     * OWL
 
