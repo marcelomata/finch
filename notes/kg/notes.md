@@ -1,5 +1,3 @@
-
-
 * Chapter 1 - Knowledge Graph Overview
 
     * Essence of KG
