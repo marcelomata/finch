@@ -30,13 +30,13 @@ Author: [Zhedong Zheng](https://github.com/zhedongzheng)
         
         * Blank Nodes are allowed in RDF
         	
-        	  * A resource can be anonymous
+            * A resource can be anonymous
         	
-        	  * Not labelled by URI, labelled as _: xyz
+        	   * Not labelled by URI, labelled as _: xyz
         	  
-        	  * For example, Haofen is the speaker of one (but not interested which one) KG conference
+        	   * For example, Haofen is the speaker of one (but not interested which one) KG conference
  
- 				 <img src="img/p1.png" height='200'>
+ 				  <img src="img/p1.png" height='200'>
  				
  			      * This is 2-hop relationship
  
