@@ -3,9 +3,9 @@
 ---
 #### Why This Project?
 
-* TF practice based on high-level interfaces: Layers, Datasets, Estimators
+* TF practice based on high-level interfaces: tf.layers, tf.data, tf.estimator;
 
-* Lots of clean Notebooks to view and play with
+* Lots of clean Notebooks to view and play with;
 
 ---
 #### Contents
