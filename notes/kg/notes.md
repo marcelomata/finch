@@ -29,6 +29,8 @@ Notes organized by: [Zhedong Zheng](https://github.com/zhedongzheng)
             * RDF triples can be seen as arcs of a graph (vertex + edge + vertex)
             
               <img src="img/p2.png" height='200'>
+              
+              CCF ADL invites Haofen as a speaker; The theme of speech is KG;
         
         * In RDF resources and properties are identified by URIs
         
