@@ -130,7 +130,7 @@
 
 * [Notes](https://github.com/zhedongzheng/finch/blob/master/notes/kg/notes.md)
 
-* Knowledge Embedding
+* Knowledge Representation（知识表示）
 
 #### TensorFlow Detail（TensorFlow 细节）
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/tf.png" height='150'>
