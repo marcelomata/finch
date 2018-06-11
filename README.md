@@ -128,11 +128,9 @@
 #### Knowledge Graph（知识图谱）
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/kg.png" height='150'>
 
-* [Course Notes](https://github.com/zhedongzheng/finch/blob/master/notes/kg/notes.md)
+* [Notes](https://github.com/zhedongzheng/finch/blob/master/notes/kg/notes.md)
 
-* Link Prediction（关系预测）
-
-    * 
+* Knowledge Embedding
 
 #### TensorFlow Detail（TensorFlow 细节）
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/tf.png" height='150'>
