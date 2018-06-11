@@ -15,7 +15,7 @@
 │   └── example.py
 │   
 ├── mains              
-│   └── train_siamese_rnn.py  
+│   └── train_word_siamese_rnn.py  
 │  
 └── model  
     └── siamese_rnn.py

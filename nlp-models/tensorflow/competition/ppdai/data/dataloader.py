@@ -8,21 +8,21 @@ def _parse_train_fn(example_proto):
             parsed_feats = tf.parse_single_example(
                 example_proto,
                 features={
-                    'input1': tf.FixedLenFeature([args.w_max_len], tf.int64),
-                    'input2': tf.FixedLenFeature([args.w_max_len], tf.int64),
+                    'input1': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True),
+                    'input2': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True),
                     'label': tf.FixedLenFeature([], tf.int64)
                 })
-            return parsed_feats['input1'], parsed_feats['input2'], parsed_feats['label']
+            return parsed_feats
 
 
 def _parse_test_fn(example_proto):
             parsed_feats = tf.parse_single_example(
                 example_proto,
                 features={
-                    'input1': tf.FixedLenFeature([args.w_max_len], tf.int64),
-                    'input2': tf.FixedLenFeature([args.w_max_len], tf.int64),
+                    'input1': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True),
+                    'input2': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True),
                 })
-            return parsed_feats['input1'], parsed_feats['input2']
+            return parsed_feats
 
 
 class DataLoader(object):
@@ -34,25 +34,28 @@ class DataLoader(object):
         ds = tf.data.TFRecordDataset(['../data/tfrecords/word_train.tfrecord'])
         ds = ds.map(_parse_train_fn)
         ds = ds.shuffle(250000)
-        ds = ds.batch(args.batch_size)
+        ds = ds.padded_batch(args.batch_size, {'input1': [None], 'input2': [None], 'label': []})
         iterator = ds.make_one_shot_iterator()
-        x1, x2, y = iterator.get_next()
+        batch = iterator.get_next()
+        x1, x2, y = batch['input1'], batch['input2'], batch['label']
         return ({'input1': x1, 'input2': x2}, y)
 
 
     def val_input_fn(self):
         ds = tf.data.TFRecordDataset(['../data/tfrecords/word_val.tfrecord'])
         ds = ds.map(_parse_train_fn)
-        ds = ds.batch(args.batch_size)
+        ds = ds.padded_batch(args.batch_size, {'input1': [None], 'input2': [None], 'label': []})
         iterator = ds.make_one_shot_iterator()
-        x1, x2, y = iterator.get_next()
+        batch = iterator.get_next()
+        x1, x2 = batch['input1'], batch['input2']
         return ({'input1': x1, 'input2': x2})
 
     
     def predict_input_fn(self):
         ds = tf.data.TFRecordDataset(['../data/tfrecords/word_test.tfrecord'])
         ds = ds.map(_parse_test_fn)
-        ds = ds.batch(args.batch_size)
+        ds = ds.padded_batch(args.batch_size, {'input1': [None], 'input2': [None]})
         iterator = ds.make_one_shot_iterator()
-        x1, x2 = iterator.get_next()
+        batch = iterator.get_next()
+        x1, x2 = batch['input1'], batch['input2']
         return ({'input1': x1, 'input2': x2})

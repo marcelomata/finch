@@ -112,7 +112,7 @@ class PreProcessor:
             q2w = load_obj(self.q2w_path)
 
             ori_train_csv = pd.read_csv(self.csv_train_path)
-            thres = int(len(ori_train_csv) * 0.9)
+            thres = int(len(ori_train_csv) * args.train_val_split)
             train_csv = ori_train_csv[:thres]
             val_csv = ori_train_csv[thres:]
             test_csv = pd.read_csv(self.csv_test_path)
@@ -125,20 +125,13 @@ class PreProcessor:
             test_fn(test_csv, self.tfrecord_test_path, PAD_INT, q2w)
 
 
-
-def fn1(str_li, int_li):
-    for i, s in enumerate(str_li[:args.w_max_len]):
-        int_li[i] = int(str_li[i])
-
-
 def train_fn(csv, path, PAD_INT, q2w):
     writer = tf.python_io.TFRecordWriter(path)
     for arr_line in tqdm(csv.values, total=len(csv), ncols=70):
-        q1_id_int, q2_id_int = [PAD_INT]*args.w_max_len, [PAD_INT]*args.w_max_len
-
         label, q1_id, q2_id = arr_line
-        fn1(q2w[q1_id], q1_id_int)
-        fn1(q2w[q2_id], q2_id_int)
+
+        q1_id_int = [int(st) for st in q2w[q1_id]]
+        q2_id_int = [int(st) for st in q2w[q2_id]]
         
         example = tf.train.Example(
             features = tf.train.Features(
@@ -157,11 +150,10 @@ def train_fn(csv, path, PAD_INT, q2w):
 def test_fn(csv, path, PAD_INT, q2w):
     writer = tf.python_io.TFRecordWriter(path)
     for arr_line in tqdm(csv.values, total=len(csv), ncols=70):
-        q1_id_int, q2_id_int = [PAD_INT]*args.w_max_len, [PAD_INT]*args.w_max_len
-
         q1_id, q2_id = arr_line
-        fn1(q2w[q1_id], q1_id_int)
-        fn1(q2w[q2_id], q2_id_int)
+
+        q1_id_int = [int(st) for st in q2w[q1_id]]
+        q2_id_int = [int(st) for st in q2w[q2_id]]
         
         example = tf.train.Example(
             features = tf.train.Features(

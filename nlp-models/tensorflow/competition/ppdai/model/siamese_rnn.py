@@ -14,8 +14,14 @@ def load_embedding():
 
 
 def cell_fn(sz):
-    cell = tf.nn.rnn_cell.GRUCell(sz,
-                                  kernel_initializer=tf.orthogonal_initializer())
+    if args.rnn_type == 'gru':
+        cell = tf.nn.rnn_cell.GRUCell(sz,
+                                      kernel_initializer=tf.orthogonal_initializer())
+    elif args.rnn_type == 'lstm':
+        cell = tf.nn.rnn_cell.LSTMCell(sz,
+                                       initializer=tf.orthogonal_initializer())
+    else:
+        raise ValueError("args.rnn_type has to be 'lstm' or 'gru'")
     return cell
 
 
@@ -31,7 +37,12 @@ def rnn(x, cell_fw, cell_bw):
                                                       seq_len,
                                                       dtype=tf.float32)
     outputs = tf.concat(outputs, -1)
-    states = tf.concat(states, -1)
+    if args.rnn_type == 'lstm':
+        states = tf.concat([s.h for s in states], -1)
+    elif args.rnn_type == 'gru':
+        states = tf.concat(states, -1)
+    else:
+        raise ValueError("args.rnn_type has to be 'lstm' or 'gru'")
     return outputs, states
 
 
@@ -48,9 +59,12 @@ def clip_grads(loss):
     return zip(clipped_grads, params)
 
 
-def additive_attn(query, values, v, w, masks):
+def attn(query, context, v, w1, w2, masks):
     query = tf.expand_dims(query, 1)
-    align = v * tf.tanh(query + w(values))
+    keys = w1(context)
+    values = w2(context)
+
+    align = v * tf.tanh(query + keys)
     align = tf.reduce_sum(align, [2])
 
     paddings = tf.fill(tf.shape(align), float('-inf'))
@@ -62,45 +76,38 @@ def additive_attn(query, values, v, w, masks):
     return val
 
 
-def mul_attn(query, values, w):
-    query = tf.expand_dims(query, -1)
-    align = tf.matmul(w(values), query)
-    align = tf.squeeze(align, -1)
-    align = tf.nn.softmax(align)
-    align = tf.expand_dims(align, -1)
-    val = tf.squeeze(tf.matmul(values, align, transpose_a=True), -1)
-    return val
-
-
 def forward(features, mode):
     is_training = (mode == tf.estimator.ModeKeys.TRAIN)
     x1, x2 = features['input1'], features['input2']
-    batch_sz = tf.shape(x1)[0]
-    x = tf.concat([x1, x2], axis=0)
     
     embedding = tf.convert_to_tensor(load_embedding())
-    x = embed(x, embedding, is_training)
-    mask = mask_fn(x)
+    x1 = embed(x1, embedding, is_training)
+    x2 = embed(x2, embedding, is_training)
+    mask1 = mask_fn(x1)
+    mask2 = mask_fn(x2)
 
     cell_fw, cell_bw = cell_fn(args.hidden_units//2), cell_fn(args.hidden_units//2)
-    o, s = rnn(x, cell_fw, cell_bw)
-
-    o1, o2 = tf.split(o, 2)
-    s1, s2 = tf.split(s, 2)
-    mask1, mask2 = tf.split(mask, 2)
+    o1, s1 = rnn(x1, cell_fw, cell_bw)
+    o2, s2 = rnn(x2, cell_fw, cell_bw)
     
-    v = tf.get_variable('attn_v', [args.hidden_units])
-    w = tf.layers.Dense(args.hidden_units)
-    attn1 = additive_attn(s1, o2, v, w, mask2)
-    attn2 = additive_attn(s2, o1, v, w, mask1)
+    with tf.variable_scope('attention'):
+        v = tf.get_variable('attn_v', [args.hidden_units])
+        w1 = tf.layers.Dense(args.hidden_units)
+        w2 = tf.layers.Dense(args.hidden_units)
+        attn1 = attn(s1, o2, v, w1, w2, mask2)
+        attn2 = attn(s2, o1, v, w1, w2, mask1)
 
-    x = tf.concat([(s1 - s2),
+    x = tf.concat([attn1,
+                   attn2,
+                   tf.abs(s1 - s2),
+                   tf.abs(attn1 - attn2),
                    (s1 * s2),
-                   (attn1 - attn2),
-                   (attn1 * attn2)], -1)
-    x = tf.layers.dropout(x, 0.2, training=is_training)
-    x = tf.layers.dense(x, args.hidden_units, tf.nn.leaky_relu)
-    x = tf.squeeze(tf.layers.dense(x, 1), -1)
+                   (attn1 * attn2),], -1)
+    
+    with tf.variable_scope('output'):
+        x = tf.layers.dropout(x, 0.2, training=is_training)
+        x = tf.layers.dense(x, args.hidden_units, tf.nn.leaky_relu)
+        x = tf.squeeze(tf.layers.dense(x, 1), -1)
     
     return x
 
@@ -115,7 +122,7 @@ def model_fn(features, labels, mode):
         tf.logging.info('\n'+pprint.pformat(tf.trainable_variables()))
         global_step = tf.train.get_global_step()
 
-        LR = {'start': 1e-3, 'end': 5e-4, 'steps': 50000}
+        LR = {'start': 1e-3, 'end': 5e-4, 'steps': 20000}
         
         lr_op = tf.train.exponential_decay(
             LR['start'], global_step, LR['steps'], LR['end']/LR['start'])

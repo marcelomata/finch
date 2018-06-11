@@ -14,6 +14,10 @@ from data import DataLoader, PreProcessor
 from model.siamese_rnn import model_fn
 
 
+MODEL_PATH = '../model/word_siamese_rnn_ckpt'
+SUBMIT_PATH = './submit_word_siamese_rnn.csv'
+
+
 def get_val_labels():
     ori_train_csv = pd.read_csv('../data/original_files/train.csv')
     thres = int(len(ori_train_csv) * 0.9)
@@ -23,22 +27,27 @@ def get_val_labels():
 
 def main():
     create_logging()
-
+    tf.logging.info('\n'+pprint.pformat(args.__dict__))
     dl = DataLoader()
-
-    estimator = tf.estimator.Estimator(model_fn)
-    
+    for f in os.listdir(MODEL_PATH):
+        os.remove(os.path.join(MODEL_PATH, f))
+    estimator = tf.estimator.Estimator(model_fn,
+                                       model_dir=MODEL_PATH,
+                                       config=tf.estimator.RunConfig(keep_checkpoint_max=1))
     y_true = get_val_labels()
     for _ in range(args.n_epochs):
         estimator.train(lambda: dl.train_input_fn())
         y_pred = list(estimator.predict(lambda: dl.val_input_fn()))
-        tf.logging.info('\nVal Log Loss: %.3f\n' % log_loss(y_true, y_pred, eps=1e-15))
+        tf.logging.info('\nVal Log Loss: %.3f\n' % log_loss(
+            np.asarray(y_true, np.float64),
+            np.asarray(y_pred, np.float64),
+            labels=[0, 1]))
     submit_arr = np.asarray(list(estimator.predict(lambda: dl.predict_input_fn())))
     print(submit_arr.shape)
     
     submit = pd.DataFrame()
     submit['y_pre'] = submit_arr
-    submit.to_csv('./submit_siamese_rnn.csv',index=False)
+    submit.to_csv(SUBMIT_PATH, index=False)
 
 
 if __name__ == '__main__':
