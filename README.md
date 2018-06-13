@@ -84,7 +84,7 @@
     
 * Question Matching (问题匹配)
 
-    * [Competition - ai.ppdai.com](https://github.com/zhedongzheng/finch/tree/master/nlp-models/tensorflow/competition/ppdai)
+    * [Competition](https://github.com/zhedongzheng/finch/tree/master/nlp-models/tensorflow/competition/ppdai)
 
 #### Sequence Labelling（序列标记）
 <img src="https://github.com/zhedongzheng/finch/blob/master/nlp-models/assets/decoration_4.jpg" height='100'>
