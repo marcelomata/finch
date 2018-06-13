@@ -1,7 +1,7 @@
 import tensorflow as tf
 
-from configs import args
-from .preprocess import PreProcessor
+from configs.rnn_config import args
+from .preprocess_word_rnn import PreProcessor
 
 
 def _parse_train_fn(example_proto):

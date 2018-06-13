@@ -1,5 +1,5 @@
 from tqdm import tqdm
-from configs import args
+from configs.rnn_config import args
 
 import tensorflow as tf
 import numpy as np
@@ -19,13 +19,15 @@ def load_obj(path):
 
 class PreProcessor:
     def __init__(self):
-        self.csv_train_path = '../data/original_files/train.csv'
-        self.csv_test_path = '../data/original_files/test.csv'
-        self.question_path = '../data/original_files/question.csv'
-        self.cleaned_question_path = '../data/processed_files/question_cleaned.csv'
-        self.embedding_path = '../data/original_files/word_embed.txt'
-        self.save_embedding_path = '../data/processed_files/embedding.npy'
-        self.q2w_path = '../data/processed_files/q2w.pkl'
+        self.csv_train_path = '../data/files_original/train.csv'
+        self.csv_test_path = '../data/files_original/test.csv'
+        self.question_path = '../data/files_original/question.csv'
+        self.embedding_path = '../data/files_original/word_embed.txt'
+
+        self.cleaned_question_path = '../data/files_processed/question_cleaned.csv'
+        self.save_embedding_path = '../data/files_processed/word_embedding.npy'
+        self.q2w_path = '../data/files_processed/q2w.pkl'
+        
         self.tfrecord_train_path = '../data/tfrecords/word_train.tfrecord'
         self.tfrecord_val_path = '../data/tfrecords/word_val.tfrecord'
         self.tfrecord_test_path = '../data/tfrecords/word_test.tfrecord'
@@ -98,7 +100,6 @@ class PreProcessor:
 
             q2w, q2c, w_lens, c_lens = fn(self.cleaned_question_path)
             save_obj(q2w, self.q2w_path)
-            #save_obj(q2c, './q2c.pkl')
     
 
     def make_tfrecords(self):

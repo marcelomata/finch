@@ -1,4 +1,4 @@
-from configs import args
+from configs.rnn_config import args
 
 import tensorflow as tf
 import numpy as np
@@ -8,7 +8,7 @@ import pprint
 
 def load_embedding():
     t0 = time.time()
-    embedding = np.load('../data/processed_files/embedding.npy')
+    embedding = np.load('../data/files_processed/word_embedding.npy')
     print("Load word_embed: %.2fs"%(time.time()-t0))
     return embedding
 
@@ -48,7 +48,7 @@ def rnn(x, cell_fw, cell_bw):
 
 def embed(x, embedding, is_training):
     x = tf.nn.embedding_lookup(embedding, x)
-    x = tf.layers.dropout(x, 0.1, is_training)
+    x = tf.layers.dropout(x, 0.2, is_training)
     return x
 
 
@@ -76,6 +76,13 @@ def attn(query, context, v, w1, w2, masks):
     return val
 
 
+def k_max(x, k):
+    x = tf.transpose(x, [0,2,1])
+    x = tf.nn.top_k(x, k, sorted=True).values
+    x = tf.reshape(x, [-1, k*args.hidden_units])
+    return x
+
+
 def forward(features, mode):
     is_training = (mode == tf.estimator.ModeKeys.TRAIN)
     x1, x2 = features['input1'], features['input2']
@@ -97,16 +104,22 @@ def forward(features, mode):
         attn1 = attn(s1, o2, v, w1, w2, mask2)
         attn2 = attn(s2, o1, v, w1, w2, mask1)
 
-    x = tf.concat([attn1,
-                   attn2,
-                   tf.abs(s1 - s2),
-                   tf.abs(attn1 - attn2),
-                   (s1 * s2),
-                   (attn1 * attn2),], -1)
+    k1 = k_max(o1, 3)
+    k2 = k_max(o2, 3)
+
+    x = tf.concat([
+        tf.abs(k1 - k2),
+        (k1 * k2),
+        attn1,
+        attn2,
+        tf.abs(attn1 - attn2),
+        (attn1 * attn2),
+    ], -1)
     
     with tf.variable_scope('output'):
-        x = tf.layers.dropout(x, 0.2, training=is_training)
-        x = tf.layers.dense(x, args.hidden_units, tf.nn.leaky_relu)
+        x = tf.layers.dropout(x, 0.4, training=is_training)
+        x = tf.layers.dense(x, 2*args.hidden_units, tf.nn.elu)
+        x = tf.layers.dense(x, args.hidden_units, tf.nn.elu)
         x = tf.squeeze(tf.layers.dense(x, 1), -1)
     
     return x
@@ -122,7 +135,7 @@ def model_fn(features, labels, mode):
         tf.logging.info('\n'+pprint.pformat(tf.trainable_variables()))
         global_step = tf.train.get_global_step()
 
-        LR = {'start': 1e-3, 'end': 5e-4, 'steps': 20000}
+        LR = {'start': 1e-3, 'end': 5e-4, 'steps': 10000}
         
         lr_op = tf.train.exponential_decay(
             LR['start'], global_step, LR['steps'], LR['end']/LR['start'])

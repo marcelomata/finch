@@ -9,9 +9,9 @@ import os, sys
 sys.path.append(os.path.dirname(os.getcwd()))
 
 from log import create_logging
-from configs import args
-from data import DataLoader, PreProcessor
-from model.siamese_rnn import model_fn
+from configs.rnn_config import args
+from data.dataloaders.dataloader_word_rnn import DataLoader
+from model.word_siamese_rnn import model_fn
 
 
 MODEL_PATH = '../model/word_siamese_rnn_ckpt'
@@ -19,8 +19,8 @@ SUBMIT_PATH = './submit_word_siamese_rnn.csv'
 
 
 def get_val_labels():
-    ori_train_csv = pd.read_csv('../data/original_files/train.csv')
-    thres = int(len(ori_train_csv) * 0.9)
+    ori_train_csv = pd.read_csv('../data/files_original/train.csv')
+    thres = int(len(ori_train_csv) * args.train_val_split)
     val_csv = ori_train_csv[thres:]
     return val_csv['label'].values
 
@@ -29,11 +29,18 @@ def main():
     create_logging()
     tf.logging.info('\n'+pprint.pformat(args.__dict__))
     dl = DataLoader()
-    for f in os.listdir(MODEL_PATH):
-        os.remove(os.path.join(MODEL_PATH, f))
+
+    if not os.path.exists(MODEL_PATH):
+        os.makedirs(MODEL_PATH)
+    prev_models = os.listdir(MODEL_PATH)
+    if prev_models is not None:
+        for f in prev_models:
+            os.remove(os.path.join(MODEL_PATH, f))
+    
     estimator = tf.estimator.Estimator(model_fn,
                                        model_dir=MODEL_PATH,
                                        config=tf.estimator.RunConfig(keep_checkpoint_max=1))
+    
     y_true = get_val_labels()
     for _ in range(args.n_epochs):
         estimator.train(lambda: dl.train_input_fn())

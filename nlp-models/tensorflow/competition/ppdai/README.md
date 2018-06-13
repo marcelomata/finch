@@ -1,15 +1,16 @@
 
 ```
 ├── configs
-│   └── config.py   
+│   └── rnn_config.py   
 │
 ├── data               
-│   └── dataloader.py
-│   └── preprocess.py
-│   └── draft.ipynb
-│   └── original_files/
-│   └── processed_files/
-│   └── tfrecords/
+│   └── dataloaders
+│   	 └── dataloader_rnn
+│   	 └── preprocess_rnn
+│   └── files_original
+│   └── files_processed
+│   └── notebooks
+│   └── tfrecords
 │
 ├── log             
 │   └── example.py
